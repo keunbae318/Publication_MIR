@@ -4,9 +4,7 @@ authors:
 - family-names: "Kim"
   given-names: "Keunbae"
   orcid: "https://orcid.org/0000-0002-5736-4142"
-- family-names: "Bot"
-  given-names: "Hew"
-  orcid: "https://orcid.org/0000-0000-0000-0000"
+
 title: "R script for pls and plsda model:Mid-infrared spectroscopy as a tool to assess oxidative signatures and monitor restoration trajectories in peatlands "
 version: 0.1.0
 doi: 10.5281/zenodo.17827850
