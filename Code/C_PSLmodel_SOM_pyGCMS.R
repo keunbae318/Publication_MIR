@@ -70,10 +70,14 @@ apply_preproc <- function(p_idx, Train_spc, Test_spc) {
   } else if(p_idx == 2){
     Xtr <- t(diff(t(Train_spc), differences = 1))
     Xte <- t(diff(t(Test_spc), differences = 1))
+    colnames(Xtr) <- colnames(Train_spc)[-1]
+    colnames(Xte) <- colnames(Test_spc)[-1]
     name <- "firstDer"
   } else if(p_idx == 3){
     Xtr <- t(diff(t(Train_spc), differences = 2))
     Xte <- t(diff(t(Test_spc), differences = 2))
+    colnames(Xtr) <- colnames(Train_spc)[-c(1,2)]
+    colnames(Xte) <- colnames(Test_spc)[-c(1,2)]
     name <- "secondDer"
   } else if(p_idx == 4){
     Xtr <- savitzkyGolay(Train_spc, p=2, w=21, m=0)
@@ -88,8 +92,9 @@ apply_preproc <- function(p_idx, Train_spc, Test_spc) {
     Xte <- savitzkyGolay(Test_spc, p=2, w=21, m=2)
     name <- "sgSecondDer"
   } else if(p_idx == 7){
-    Xtr <- msc(as.matrix(Train_spc))
-    Xte <- msc(as.matrix(Test_spc))
+    ref <- colMeans(Train_spc)
+    Xtr <- prospectr::msc(as.matrix(Train_spc), ref)
+    Xte <- prospectr::msc(as.matrix(Test_spc), ref)
     name <- "msc"
   } else if(p_idx == 8){
     Xtr <- standardNormalVariate(Train_spc)
@@ -98,8 +103,8 @@ apply_preproc <- function(p_idx, Train_spc, Test_spc) {
   } else if(p_idx == 9){
     wav_tr <- as.numeric(colnames(Train_spc))
     wav_te <- as.numeric(colnames(Test_spc))
-    Xtr <- detrend(Train_spc, wav = wav_tr)
-    Xte <- detrend(Test_spc, wav = wav_te)
+    Xtr <- detrend(standardNormalVariate(Train_spc), wav = wav_tr, p = 2)
+    Xte <- detrend(standardNormalVariate(Test_spc),  wav = wav_te, p = 2)
     name <- "snv_dt"
   } else {
     Xtr <- Train_spc
@@ -1072,6 +1077,7 @@ stopCluster(cl)
 load("Data/PLS_model_revision/results3_list.RData")
 results3_list
   
+
 
 
 
